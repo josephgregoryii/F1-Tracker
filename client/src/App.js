@@ -1,5 +1,4 @@
-//import './App.css';
-import SeasonsContainer from './components/Season/SeasonContainer'
+import SeasonsContainer from './containers/SeasonContainer/SeasonContainer'
 
 import GlobalStyle from './globalStyles'
 
@@ -7,8 +6,6 @@ function App() {
   return (
     <div className="App">
       <GlobalStyle />
-      <header >
-      </header>
       <SeasonsContainer/>
     </div>
   );

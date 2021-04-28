@@ -12,7 +12,14 @@ body {
   font-family: 'Formula1-Bold';
   src: local('Formula1-Bold'), url(./fonts/Formula1-Bold.otf) format('truetype');
 }
-
+@font-face {
+  font-family: 'Formula1-Regular';
+  src: local('Formula1-Regular'), url(./fonts/Formula1-Regular.otf) format('truetype');
+}
+@font-face {
+  font-family: 'Formula1-Wide';
+  src: local('Formula1-Wide'), url(./fonts/Formula1-Wide.otf) format('truetype');
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

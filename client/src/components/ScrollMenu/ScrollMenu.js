@@ -1,6 +1,12 @@
 import React from 'react'
-import styled from 'styled-components'
 import ScrollMenu from 'react-horizontal-scrolling-menu';
+
+import './ScrollMenu.css'
+
+import {
+    ArrowDiv,
+    MenuItemDiv
+} from './ScrollMenuStyled/ScrollMenu.styled'
 
 // One item component
 // selected prop will be passed
@@ -11,24 +17,20 @@ const MenuItem = ({ text, selected }) => {
 };
 
 // All items component
-// Important! add unique key
-export const Menu = (list, selected) =>
+const Menu = (list, selected) =>
     list.map(el => {
-        const { id, description } = el
-        return <MenuItem 
-            text={description} 
-            key={id} 
+        return <MenuItem
+            className="noselect"
+            text={el.season}
+            key={el.season}
             selected={selected} />;
     });
 
-const ArrowDiv = styled.div`
-    padding: 20px;
-    cursor: pointer;
-`
-export const Arrow = ({ text, className }) => {
+const Arrow = ({ text, className }) => {
     return (
         <ArrowDiv
-            className={className}
+            className={`${className} noselect`}
+            key={text}
         >{text}</ArrowDiv>
     );
 };
@@ -39,7 +41,7 @@ export const ArrowRight = Arrow({ text: '>', className: 'arrow-next' });
 export default function ScrollMenuComponent(props) {
     return (
         <ScrollMenu
-            data={Menu(props.allSeasons, props.currentSeason )}
+            data={Menu(props.allSeasons, props.currentSeason)}
             arrowLeft={ArrowLeft}
             arrowRight={ArrowRight}
             selected={props.currentSeason}
@@ -47,17 +49,8 @@ export default function ScrollMenuComponent(props) {
             scrollToSelected={props.scrollToSelected}
             hideSingleArrow={props.hideSingleArrow}
             wheel={props.wheel}
+            menuStyle={{width: '1000px'}
+            }
         />
     )
 }
-
-const MenuItemDiv = styled.div`
-    padding: 20px 30px;
-    margin: 5px 5px;
-    margin-right: 5%;
-    cursor: pointer;
-
-    &.active {
-    background-color: #950316;
-   }
-`

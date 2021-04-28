@@ -1,94 +1,79 @@
-import React, { Component } from 'react'
-import { LinearProgress } from '@material-ui/core'
-import styled from 'styled-components'
+import React, {
+    Component
+} from 'react'
+import axios from 'axios'
+
+import {
+    RacesLoadingComponent,
+    RacesComponent,
+    RaceItemComponent,
+} from '../Races/RaceComponents'
 
 class Season extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            render: false,
-            seasonID: "",
-            seasonRaces: {},
-            seasonDrivers: {},
-            seasonObj: {}
+            isLoading: true,
+            currentSeason: '',
+            meta: '',
+            seasonRaces: {}
         }
+        this.sortRaces = this.sortRaces.bind(this)
+        this.renderRaces = this.renderRaces.bind(this)
     }
 
-    componentDidMount() {
-        if (this.props.season) {
-            // Timer is set to disable multiple API calls within a single second
-            setTimeout(function () {
-                this.setState({ render: true })
-                this.fetchData(`/f1/seasons/stage/${this.props.season}`)
-            }.bind(this), 1000)
+    async componentDidMount() {
+        await axios
+            .get(`/f1/seasons/${this.props.currentSeason}/races`)
+            .then(res => {
+                const seasonRaces = this.renderRaces(res.data.results)
+                setTimeout(() => {
+                    this.setState({
+                        currentSeason: this.props.currentSeason,
+                        seasonRaces: seasonRaces,
+                        isLoading: !this.state.isLoading,
+                        meta: res.data.meta,
+                    })
+                }, 500)
+            })
 
-        }
 
-    }
-
-    fetchData(url) {
-        return fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-type': 'application/json'
-            }
-        })
-            .then(res => res.json())
-            .then(season => this.setState({
-                seasonRaces: season.stage.stages,
-                seasonDrivers: season.stage.competitors,
-                seasonObj: season
-            }
-                //, () => console.log(`state for ${this.state.seasonObj.stage.description}`, this.state)
-            ))
-            .catch(error => console.log(error))
     }
 
     sortRaces(raceA, raceB) {
-        return (raceA.scheduled < raceB.scheduled) ? -1 : ((raceA.scheduled > raceB.scheduled) ? 1 : 0)
+        return (raceA.start_date < raceB.start_date) ?
+            -1 :
+            ((raceA.start_date > raceB.start_date) ?
+                1 :
+                0
+            )
+    }
+
+    renderRaces(seasonRaces) {
+        return Array.from(seasonRaces)
+
+            // Custom sort to sort races by scheduled date
+            .sort(this.sortRaces)
+
+            // Map array to Component
+            .map(race => {
+                return (
+                    <RaceItemComponent race={race} />
+                )
+            })
     }
 
     render() {
-        //If this.state.render == true, which is set to true by the timer.
-        if (this.state.render) { 
-            const SeasonRaceInfo = Array.from(this.state.seasonRaces)
+        const seasonRaces = this.state.isLoading ?
+            <RacesLoadingComponent /> :
+            <RacesComponent
+                seasonResponse={this.state.seasonResponse}
+                seasonRaces={this.state.seasonRaces}
+                meta={this.state.meta}
+            />
 
-                // Filter out cancelled races. May change later
-                .filter(race => race.status !== 'Cancelled')
-
-                // Custom sort to sort races by scheduled date
-                .sort(this.sortRaces)
-
-                // Map array to React Component
-                .map(race => {
-                    //console.log('race', race)
-                    return (
-                        <RaceDiv 
-                            key={race.id} 
-                            className={race.status}>
-                            {race.description}
-                        </RaceDiv>
-                    )
-                })
-            return (
-                <div>
-                    {SeasonRaceInfo}
-                </div>
-            )
-        }
-        else {
-            return (
-                <div>
-                    <LinearProgress />
-                    <LinearProgress color="secondary" />
-                </div>
-            )
-        }
-
+        return seasonRaces
     }
 }
-export default Season
 
-const RaceDiv = styled.div`
-    text-align: center;
-`
+export default Season
