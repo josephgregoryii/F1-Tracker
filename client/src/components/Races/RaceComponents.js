@@ -54,7 +54,7 @@ export function RaceItem(props) {
         <RaceItemLi
             key={props.race.race_id}
             className={props.race.status}
-            selectRace={() => props.selectRace}
+            onClick={ () => props.selectRace(props.race) }
             > {props.race.name}
         </RaceItemLi>)
 }

@@ -52,11 +52,9 @@ class Season extends Component {
                 0
             )
     }
-    selectRace({ race }) {
-        this.setState({
-            currentRace: race
-        }, () => console.log(this.state.currentRace)
-        )
+    selectRace(race) {
+        console.log(race)
+
     }
 
     renderRaces(seasonRaces) {
@@ -70,7 +68,7 @@ class Season extends Component {
                 return <RaceItem
                     key={race.race_id}
                     race={race}
-                    selectRace={this.selectRace}
+                    selectRace={ this.selectRace }
                 />
             }, this)
     }
