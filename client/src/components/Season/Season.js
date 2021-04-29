@@ -4,22 +4,26 @@ import React, {
 import axios from 'axios'
 
 import {
-    RacesLoadingComponent,
-    RacesComponent,
-    RaceItemComponent,
+    RacesLoading,
+    RaceItem,
+    Races,
 } from '../Races/RaceComponents'
 
 class Season extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isLoading: true,
-            currentSeason: '',
             meta: '',
-            seasonRaces: {}
+            isLoading: true,
+            seasonRaces: {},
+            currentRace: {},
+            selectedRace: {},
+            currentSeason: '',
+            
         }
         this.sortRaces = this.sortRaces.bind(this)
         this.renderRaces = this.renderRaces.bind(this)
+        this.selectRace = this.selectRace.bind(this)
     }
 
     async componentDidMount() {
@@ -48,6 +52,12 @@ class Season extends Component {
                 0
             )
     }
+    selectRace({ race }) {
+        this.setState({
+            currentRace: race
+        }, () => console.log(this.state.currentRace)
+        )
+    }
 
     renderRaces(seasonRaces) {
         return Array.from(seasonRaces)
@@ -57,22 +67,24 @@ class Season extends Component {
 
             // Map array to Component
             .map(race => {
-                return (
-                    <RaceItemComponent race={race} />
-                )
-            })
+                return <RaceItem
+                    key={race.race_id}
+                    race={race}
+                    selectRace={this.selectRace}
+                />
+            }, this)
     }
 
     render() {
-        const seasonRaces = this.state.isLoading ?
-            <RacesLoadingComponent /> :
-            <RacesComponent
+        return this.state.isLoading ?
+            <RacesLoading /> :
+            <Races
+                key={this.state.meta.title}
                 seasonResponse={this.state.seasonResponse}
                 seasonRaces={this.state.seasonRaces}
                 meta={this.state.meta}
             />
 
-        return seasonRaces
     }
 }
 

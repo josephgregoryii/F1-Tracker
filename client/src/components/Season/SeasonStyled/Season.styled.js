@@ -7,6 +7,12 @@ export const UnderlineDiv = styled.div`
     top: 16.1%;
 `
 
+export const ContainerDiv = styled.div`
+    float: left;
+
+`
+
+
 export const FooterDiv = styled.div`
     height: 140px;
     width: 100%;

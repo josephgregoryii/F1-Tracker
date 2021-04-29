@@ -1,6 +1,9 @@
 import React from 'react'
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+
 import './ScrollMenu.css'
 
 import {
@@ -35,10 +38,10 @@ const Arrow = ({ text, className }) => {
     );
 };
 
-export const ArrowLeft = Arrow({ text: '<', className: 'arrow-prev' });
-export const ArrowRight = Arrow({ text: '>', className: 'arrow-next' });
+export const ArrowLeft = Arrow({ text: <ArrowBackIosIcon/> , className: 'arrow-prev' });
+export const ArrowRight = Arrow({ text: <ArrowForwardIosIcon /> , className: 'arrow-next' });
 
-export default function ScrollMenuComponent(props) {
+export function ScrollMenuComponent(props) {
     return (
         <ScrollMenu
             data={Menu(props.allSeasons, props.currentSeason)}
@@ -49,8 +52,8 @@ export default function ScrollMenuComponent(props) {
             scrollToSelected={props.scrollToSelected}
             hideSingleArrow={props.hideSingleArrow}
             wheel={props.wheel}
-            menuStyle={{width: '1000px'}
-            }
+            translate={props.translate}
         />
     )
 }
+

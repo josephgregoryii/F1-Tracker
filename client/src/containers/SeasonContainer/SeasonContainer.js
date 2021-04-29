@@ -2,13 +2,12 @@ import React, { Component } from 'react'
 import axios from 'axios'
 
 import { LinearProgressComponent } from '../../components/Loaders/Loaders'
-import ScrollMenuComponent from '../../components/ScrollMenu/ScrollMenu'
+import { SeasonsMenu } from '../../components/Season/SeasonsMenu'
+import { DivContainer } from './SeasonContainerStyled/SeasonContainer.styled'
+
 import Season from '../../components/Season/Season'
 
-import {
-    MenuDiv,
-    DivContainer,
-} from './SeasonContainerStyled/SeasonContainer.styled'
+import { SelectedRace } from '../../components/Races/RaceComponents'
 
 class SeasonsContainer extends Component {
     constructor() {
@@ -25,32 +24,27 @@ class SeasonsContainer extends Component {
             scrollToSelected: true,
             hideSingleArrow: true,
             wheel: true,
+            translate: -1,
         }
         this.onSelect = this.onSelect.bind(this)
 
     }
 
     async componentDidMount() {
-        try {
-            const allSeasons = await axios.get('/f1/seasons').then(res => {
-                return res.data
-            })
-            const currentSeason = allSeasons.results[0].season
+        await axios
+            .get('/f1/seasons')
+            .then(res => {
 
-            this.setState({
-                isLoading: false,
-                allSeasons: allSeasons.results,
-                currentSeason: currentSeason,
-            }
-            )
+                // Initialize currentSeason to top of JSON
+                const currentSeason = res.data.results[0].season
+                this.setState({
+                    isLoading: !this.state.isLoading,
+                    allSeasons: res.data.results,
+                    currentSeason: currentSeason,
+                })
 
-        } catch (error) {
-            console.error(error)
-            this.setState({
-                isLoading: false,
-                isError: true
             })
-        }
+
     }
 
     onSelect(key) {
@@ -60,21 +54,23 @@ class SeasonsContainer extends Component {
     }
 
     render() {
-        return (
-            this.state.isLoading
-                ? <LinearProgressComponent />
-                :
-                <DivContainer>
-                    <MenuDiv key='menu-div'>
-                        <ScrollMenuComponent {...this.state} onSelect={this.onSelect} />
-                    </MenuDiv>
-                    <Season
-                        key={this.state.currentSeason}
-                        currentSeason={this.state.currentSeason}
-                    />
-                </DivContainer>
+        return this.state.isLoading ?
+            <LinearProgressComponent /> :
+            <DivContainer>
+                <SeasonsMenu
+                    {...this.state}
+                    onSelect={this.onSelect}
+                />
+                <Season
+                    key={this.state.currentSeason}
+                    currentSeason={this.state.currentSeason}
+                />
+                <SelectedRace 
+                    currentSeason={this.state.currentSeason}/>
 
-        )
+            </DivContainer>
+
+
     }
 }
 

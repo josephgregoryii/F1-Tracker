@@ -2,18 +2,28 @@ import React from 'react'
 import FadeIn from 'react-fade-in'
 
 import {
+    RaceDiv,
     RacesDiv,
     RaceHeaderDiv,
     UnderlineDiv,
-    RaceItemDiv,
+    RaceItemLi,
 } from './RacesStyled/Races.styled'
+
 
 import {
     RingLoaderComponent
 } from '../Loaders/Loaders'
 
 
-export function RacesLoadingComponent() {
+export function SelectedRace(props) {
+    return (
+        <RaceDiv >
+            test test testicales
+        </RaceDiv>
+    )
+}
+
+export function RacesLoading() {
     return (
         <RacesDiv>
             <UnderlineDiv />
@@ -22,27 +32,29 @@ export function RacesLoadingComponent() {
     )
 }
 
-export function RacesComponent(props) {
+export function Races(props) {
     return (
-        <RacesDiv key='title-div'>
-            <RaceHeaderDiv>
-                <UnderlineDiv />
-                <FadeIn >
+        <RacesDiv key='title'>
+            <RaceHeaderDiv key='header'>
+                <UnderlineDiv key='underline'/>
+                <FadeIn key='fade'>
                     {props.meta.title}
                 </FadeIn>
             </RaceHeaderDiv>
-            <FadeIn key='fade-in'>
+            <FadeIn key='fade'>
                 {props.seasonRaces}
             </FadeIn>
         </RacesDiv>
+
     )
 }
 
-export function RaceItemComponent(props) {
+export function RaceItem(props) {
     return (
-        <RaceItemDiv
+        <RaceItemLi
             key={props.race.race_id}
-            className={props.race.status}>
-            {props.race.name}
-        </RaceItemDiv>)
+            className={props.race.status}
+            selectRace={() => props.selectRace}
+            > {props.race.name}
+        </RaceItemLi>)
 }
