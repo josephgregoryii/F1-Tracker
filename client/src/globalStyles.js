@@ -5,6 +5,7 @@ const GlobalStyle = createGlobalStyle`
         font-size: large;
         font-family: 'Formula1-Regular';
         background-color: #15151e;
+        overflow: hidden;
     }
 
     .noselect {
@@ -17,9 +18,8 @@ const GlobalStyle = createGlobalStyle`
                                         supported by Chrome, Edge, Opera and Firefox */
     }
 
-    *:focus {
-        outline: none;
-    }
+    
+
 `
 
 export default GlobalStyle;

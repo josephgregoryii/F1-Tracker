@@ -41,7 +41,7 @@ app.get('/api/f1/seasons/:season/races', cache(30000), async (req, res) => {
     const { season } = req.params
     const options = {
         method: 'GET',
-        url : `https://${HOST}/races/${season}`,
+        url: `https://${HOST}/races/${season}`,
         headers: {
             'x-rapidapi-key': API_KEY,
             'x-rapidapi-host': HOST
@@ -53,28 +53,21 @@ app.get('/api/f1/seasons/:season/races', cache(30000), async (req, res) => {
         .catch(error => res.send(error.status))
 })
 
-/** TODO: FIX EVERYTHING UNDER THIS **/
-
-// get results of driver information at stage
-app.get('/api/f1/seasons/drivers/:driver', (req, res) => {
-    const { driver } = req.params
-    const url = `${BASE_URL}/competitors/${driver}/profile${FORMAT}?api_key=${API_KEY}`
+app.get('/api/f1/session/:session_id', cache(30000), async (req, res) => {
+    const { session_id } = req.params
+    const options = {
+        method: 'GET',
+        url: `https://${HOST}/session/${session_id}`,
+        headers: {
+            'x-rapidapi-key': API_KEY,
+            'x-rapidapi-host': HOST 
+        }
+    }
     return axios
-        .get(url)
-        .then(info => res.send(info.data))
-        .catch(error => res.send(error.status)) 
-})
-
-// get results of probabilities for a season stage
-app.get('/api/f1/seasons/probabilities/:stage', (req, res) => {
-    const { stage } = req.params
-    const url = `${BASE_URL}/sport_events/${stage}/probabilities${FORMAT}?api_key=${API_KEY}`
-    return axios
-        .get(url)
+        .request(options)
         .then(info => res.send(info.data))
         .catch(error => res.send(error.status))
 })
-
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`)

@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
-import { LinearProgressComponent } from '../../components/Loaders/Loaders'
-import { SeasonsMenu } from '../../components/Season/SeasonsMenu'
-import { DivContainer } from './SeasonContainerStyled/SeasonContainer.styled'
+import { LinearProgressLoader, SeasonsMenu } from '../../components'
+import SeasonRaces from '../SeasonRacesContainer/SeasonRaces'
 
-import Season from '../../components/Season/Season'
+import { DivContainer } from './styled'
 
-import { SelectedRace } from '../../components/Races/RaceComponents'
+
 
 class SeasonsContainer extends Component {
     constructor() {
@@ -55,25 +54,18 @@ class SeasonsContainer extends Component {
 
     render() {
         return this.state.isLoading ?
-            <LinearProgressComponent /> :
+            <LinearProgressLoader /> :
             <DivContainer>
                 <SeasonsMenu
                     {...this.state}
                     onSelect={this.onSelect}
                 />
-                <Season
+                <SeasonRaces
                     key={this.state.currentSeason}
                     currentSeason={this.state.currentSeason}
                 />
-                <SelectedRace 
-                    currentSeason={this.state.currentSeason}/>
 
             </DivContainer>
-
-
     }
 }
-
-
-
 export default SeasonsContainer
